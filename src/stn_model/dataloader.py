@@ -15,7 +15,7 @@ from .transformations import *
 
 
 class MVTEC(Dataset):
-    def __init__(self, root_dir, transform=None,device='cuda'):
+    def __init__(self, root_dir, transform=None,device='cuda',has_distort=0):
       self.device = device
       self.root_dir = root_dir
       self.transform = transform
@@ -39,7 +39,9 @@ class MVTEC(Dataset):
       self.rotation = RandomRotation(degrees=45)
       self.translation = RandomTranslate(translate=(0.2, 0.2))
       self.zoom = RandomZoom(zoom_range=0.2)
-      self.grid_distort = GridDistortion(alpha=50)
+      self.has_distort = has_distort
+      if self.has_distort ==1:
+        self.grid_distort = GridDistortion(alpha=50)
       
     def __len__(self):
         return len(self.data)
@@ -67,5 +69,6 @@ class MVTEC(Dataset):
         img, angle = self.rotation(img)
         img, trans = self.translation(img)
         img, zoom_factor = self.zoom(img)
-        img = self.grid_distort(img)  
+        if self.has_distort==1:
+          img = self.grid_distort(img)  
         return img, [angle, trans]

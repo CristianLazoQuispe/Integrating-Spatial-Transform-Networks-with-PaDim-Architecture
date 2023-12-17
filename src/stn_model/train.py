@@ -88,7 +88,7 @@ def start(data_dir ='../data/mvtec_anomaly_detection',batch_size = 32,learning_r
     
     device = torch.device("cuda:"+str(args.device) if torch.cuda.is_available() else "cpu")
 
-    mvtec_dataset = MVTEC(root_dir=data_dir, transform = train_transform,device=device)
+    mvtec_dataset = MVTEC(root_dir=data_dir, transform = train_transform,device=device,has_distort=args.has_distort)
     train_loader = DataLoader(mvtec_dataset, batch_size=batch_size, shuffle=True)
     # Define the proportion of data to use for validation
     validation_proportion = 0.3  # Adjust as needed
